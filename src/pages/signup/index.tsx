@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Amplify, Auth } from "aws-amplify";
+
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -20,10 +21,7 @@ import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import GoogleIcon from "./GoogleIcon";
-import awsconfig from "../../aws-exports";
 
-Amplify.configure(awsconfig);
-Auth.configure(awsconfig);
 
 interface FormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -66,21 +64,14 @@ function ColorSchemeToggle({ onClick, ...props }: IconButtonProps) {
 }
 
 export default function JoySignInSideTemplate() {
-  // const email = "kamalesh@gmail.com";
-  // const password = "Kamal@20";
+  const email = "kamaleshs@gmail.com";
+  const password = "Kamal@20";
 
-  const [emailValue, setEmailValue] = React.useState("");
-  const [passwordValue, setPasswordValue] = React.useState("");
-
-  const login = () => {
-    Auth.signIn(emailValue, passwordValue)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setEmailValue("");
-        setPasswordValue("");
-      });
-  };
+  // const signup = () => {
+  //   Auth.signUp(email, password)
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.log(err));
+  // };
 
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -171,25 +162,19 @@ export default function JoySignInSideTemplate() {
           >
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
-                <Typography level="h3">Sign in</Typography>
-                <Typography level="body-sm">
-                  New to company?{" "}
-                  <Link href="#replace-with-a-link" level="title-sm">
-                    Sign up!
-                  </Link>
-                </Typography>
+                <Typography level="h3">Sign Up</Typography>
               </Stack>
 
-              <Button
+              {/* <Button
                 variant="soft"
                 color="neutral"
                 fullWidth
                 startDecorator={<GoogleIcon />}
               >
                 Continue with Google
-              </Button>
+              </Button> */}
             </Stack>
-            <Divider
+            {/* <Divider
               sx={(theme) => ({
                 [theme.getColorSchemeSelector("light")]: {
                   color: { xs: "#FFF", md: "text.tertiary" },
@@ -201,54 +186,30 @@ export default function JoySignInSideTemplate() {
               })}
             >
               or
-            </Divider>
+            </Divider> */}
             <Stack gap={4} sx={{ mt: 2 }}>
               <form
                 onSubmit={(event: React.FormEvent<SignInFormElement>) => {
                   event.preventDefault();
-                  login();
-                  // const formElements = event.currentTarget.elements;
-                  // const data = {
-                  //   email: formElements.email.value,
-                  //   password: formElements.password.value,
-                  //   persistent: formElements.persistent.checked,
-                  // };
-                  // alert(JSON.stringify(data, null, 2));
+                  const formElements = event.currentTarget.elements;
+                  const data = {
+                    email: formElements.email.value,
+                    password: formElements.password.value,
+                  };
+                  alert(JSON.stringify(data, null, 2));
                 }}
               >
                 <FormControl required>
                   <FormLabel>Email</FormLabel>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={emailValue}
-                    onChange={(e) => setEmailValue(e.target.value)}
-                  />
+                  <Input type="email" name="email" />
                 </FormControl>
                 <FormControl required>
                   <FormLabel>Password</FormLabel>
-                  <Input
-                    type="password"
-                    name="password"
-                    value={passwordValue}
-                    onChange={(e) => setPasswordValue(e.target.value)}
-                  />
+                  <Input type="password" name="password" />
                 </FormControl>
                 <Stack gap={4} sx={{ mt: 2 }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Checkbox size="sm" label="Remember me" name="persistent" />
-                    <Link level="title-sm" href="#replace-with-a-link">
-                      Forgot your password?
-                    </Link>
-                  </Box>
                   <Button type="submit" fullWidth>
-                    Sign in
+                    Sign up
                   </Button>
                 </Stack>
               </form>
