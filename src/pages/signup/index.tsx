@@ -64,14 +64,14 @@ function ColorSchemeToggle({ onClick, ...props }: IconButtonProps) {
 }
 
 export default function JoySignInSideTemplate() {
-  const email = "kamaleshs@gmail.com";
-  const password = "Kamal@20";
+  const [emailValue, setEmailValue] = React.useState("");
+  const [passwordValue, setPasswordValue] = React.useState("");
 
-  // const signup = () => {
-  //   Auth.signUp(email, password)
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // };
+  const signup = () => {
+    Auth.signUp(emailValue, passwordValue)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -191,21 +191,26 @@ export default function JoySignInSideTemplate() {
               <form
                 onSubmit={(event: React.FormEvent<SignInFormElement>) => {
                   event.preventDefault();
-                  const formElements = event.currentTarget.elements;
-                  const data = {
-                    email: formElements.email.value,
-                    password: formElements.password.value,
-                  };
-                  alert(JSON.stringify(data, null, 2));
+                  signup();
                 }}
               >
                 <FormControl required>
                   <FormLabel>Email</FormLabel>
-                  <Input type="email" name="email" />
+                  <Input
+                    type="email"
+                    name="email"
+                    value={emailValue}
+                    onChange={(event) => setEmailValue(event.target.value)}
+                  />
                 </FormControl>
                 <FormControl required>
                   <FormLabel>Password</FormLabel>
-                  <Input type="password" name="password" />
+                  <Input
+                    type="password"
+                    name="password"
+                    value={passwordValue}
+                    onChange={(event) => setPasswordValue(event.target.value)}
+                  />
                 </FormControl>
                 <Stack gap={4} sx={{ mt: 2 }}>
                   <Button type="submit" fullWidth>
