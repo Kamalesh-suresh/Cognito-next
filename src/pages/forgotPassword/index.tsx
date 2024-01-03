@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Amplify, Auth } from "aws-amplify";
-import { useRouter } from "next/navigation";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
@@ -20,7 +19,6 @@ import Stack from "@mui/joy/Stack";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
-import GoogleIcon from "./GoogleIcon";
 import awsconfig from "../../aws-exports";
 
 Amplify.configure(awsconfig);
@@ -66,26 +64,37 @@ function ColorSchemeToggle({ onClick, ...props }: IconButtonProps) {
   );
 }
 
-export default function JoySignInSideTemplate() {
+export default function ForgotPasswordTemplate() {
   // const email = "kamalesh@gmail.com";
   // const password = "Kamal@20";
-  const router = useRouter();
 
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
+  const [confirmCode, setConfirmCode] = React.useState("");
+  const [confirmPasswordValue, setConfirmPasswordValue] = React.useState("");
+  const [mode, setMode] = React.useState("verify");
 
-  const login = () => {
-    Auth.signIn(emailValue, passwordValue)
-      .then((res) => {
-        console.log(res);
-        router.push("/");
-      })
+  console.log(emailValue);
+
+  const forgotPassword = () => {
+    Auth.forgotPassword(emailValue)
+      .then((res) => console.log(res))
       .catch((err) => console.log(err))
-      .finally(() => {
-        setEmailValue("");
-        setPasswordValue("");
-      });
+      .finally(() => {});
   };
+
+  async function changePassword() {
+    try {
+      const user = await Auth.forgotPasswordSubmit(
+        emailValue,
+        confirmCode,
+        confirmPasswordValue
+      );
+      console.log("user:", user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -176,15 +185,15 @@ export default function JoySignInSideTemplate() {
           >
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
-                <Typography level="h3">Sign in</Typography>
+                <Typography level="h3">Forgot password</Typography>
                 <Typography level="body-sm">
                   New to company?{" "}
                   <Link href={{ pathname: "/signup" }}>Sign up!</Link>
                 </Typography>
-                <Typography level="body-sm">
+                {/* <Typography level="body-sm">
                   Are you a verified user?{" "}
                   <Link href={{ pathname: "/verify" }}>Verify here!</Link>
-                </Typography>
+                </Typography> */}
               </Stack>
 
               {/* <Button
@@ -213,7 +222,12 @@ export default function JoySignInSideTemplate() {
               <form
                 onSubmit={(event: React.FormEvent<SignInFormElement>) => {
                   event.preventDefault();
-                  login();
+                  mode === "verify" && forgotPassword();
+                  mode === "changePassword" && changePassword();
+                  mode === "verify"
+                    ? setMode("changePassword")
+                    : setMode("verify");
+                  //   login();
                   // const formElements = event.currentTarget.elements;
                   // const data = {
                   //   email: formElements.email.value,
@@ -223,24 +237,51 @@ export default function JoySignInSideTemplate() {
                   // alert(JSON.stringify(data, null, 2));
                 }}
               >
-                <FormControl required>
-                  <FormLabel>Email</FormLabel>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={emailValue}
-                    onChange={(e) => setEmailValue(e.target.value)}
-                  />
-                </FormControl>
-                <FormControl required>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    type="password"
-                    name="password"
-                    value={passwordValue}
-                    onChange={(e) => setPasswordValue(e.target.value)}
-                  />
-                </FormControl>
+                {mode === "verify" && (
+                  <FormControl required>
+                    <FormLabel>Email</FormLabel>
+                    <Input
+                      type="email"
+                      name="email"
+                      value={emailValue}
+                      onChange={(e) => setEmailValue(e.target.value)}
+                    />
+                  </FormControl>
+                )}
+                {mode === "changePassword" && (
+                  <>
+                    <FormControl required>
+                      <FormLabel>Confirmation code</FormLabel>
+                      <Input
+                        type="default"
+                        name="confirmation code"
+                        value={confirmCode}
+                        onChange={(event) => setConfirmCode(event.target.value)}
+                      />
+                    </FormControl>
+
+                    <FormControl required>
+                      <FormLabel>Enter password</FormLabel>
+                      <Input
+                        type="password"
+                        name="password"
+                        value={passwordValue}
+                        onChange={(e) => setPasswordValue(e.target.value)}
+                      />
+                    </FormControl>
+                    <FormControl required>
+                      <FormLabel>Re-Enter password</FormLabel>
+                      <Input
+                        type="password"
+                        name="password"
+                        value={confirmPasswordValue}
+                        onChange={(e) =>
+                          setConfirmPasswordValue(e.target.value)
+                        }
+                      />
+                    </FormControl>
+                  </>
+                )}
                 <Stack gap={4} sx={{ mt: 2 }}>
                   <Box
                     sx={{
@@ -250,13 +291,20 @@ export default function JoySignInSideTemplate() {
                     }}
                   >
                     {/* <Checkbox size="sm" label="Remember me" name="persistent" /> */}
-                    <Link href={{ pathname: "/forgotPassword" }}>
+                    {/* <Link href={{ pathname: "/signup" }}>
                       Forgot your password?
-                    </Link>
+                    </Link> */}
                   </Box>
-                  <Button type="submit" fullWidth>
-                    Sign in
-                  </Button>
+                  {mode === "verify" && (
+                    <Button type="submit" fullWidth>
+                      Send Verifiction Code
+                    </Button>
+                  )}
+                  {mode === "changePassword" && (
+                    <Button type="submit" fullWidth>
+                      Change Password
+                    </Button>
+                  )}
                 </Stack>
               </form>
             </Stack>
