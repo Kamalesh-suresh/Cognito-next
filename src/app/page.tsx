@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Stack, Typography } from "@mui/joy";
+import { Avatar, Button, Stack, Typography } from "@mui/joy";
 import Image from "next/image";
 import { MyProvider } from "./contexts/appContext";
 import { useEffect, useState } from "react";
@@ -23,6 +23,19 @@ export default function Home() {
   //     router.push("/login");
   //   }
   // }, []);
+
+  function handleSignout() {
+    Auth.signOut()
+      .then(() => {
+        // localStorage.setItem("AUTH_ACCESS_TOKEN", null);
+        // localStorage.setItem("AUTH_ID_TOKEN", null);
+        window.localStorage.setItem("path", null);
+        // navigate("/login");
+      })
+      .catch(() => {
+        console.log("Error signing out");
+      });
+  }
 
   useEffect(() => {
     Auth.currentAuthenticatedUser().then((user) => {
@@ -67,6 +80,13 @@ export default function Home() {
                 Welcome 🎉 , {userDetails?.email}{" "}
               </Typography>
               <Avatar>{userDetails?.email?.slice(0, 1).toUpperCase()}</Avatar>
+              <Button
+                sx={{ zIndex: 15 }}
+                color="neutral"
+                onClick={() => handleSignout()}
+              >
+                Logout
+              </Button>
             </Stack>
           </Box>
           <Typography>Hi Welcome to cognito auth app</Typography>
