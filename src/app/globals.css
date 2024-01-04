@@ -1,14 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-  }
-}
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 body {
+  margin: 0;
+  padding: 0;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Avatar, Button, Stack, Typography } from "@mui/joy";
@@ -20,14 +21,11 @@ export default function Home() {
 
   interface UserDetails {
     email?: string;
-    // Add other properties as needed
   }
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     router.push("/login");
-  //   }
-  // }, []);
+  function redirectToLogin() {
+    router.push("/login");
+  }
 
   function handleSignout() {
     Auth.signOut()
@@ -35,7 +33,7 @@ export default function Home() {
         // localStorage.setItem("AUTH_ACCESS_TOKEN", null);
         // localStorage.setItem("AUTH_ID_TOKEN", null);
         // window.localStorage.setItem("path", null);
-        // navigate("/login");
+        router.push("/login");
       })
       .catch(() => {
         console.log("Error signing out");
@@ -46,6 +44,10 @@ export default function Home() {
     Auth.currentAuthenticatedUser().then((user) => {
       console.log("user:", user?.attributes);
       setUserDetails(user?.attributes);
+      if (!user?.attributes?.email) {
+        console.log("Redirecting to login...");
+        router.push("/login");
+      }
       // const res =
       //   user?.attributes?.given_name ||
       //   user?.attributes?.family_name ||
@@ -82,15 +84,17 @@ export default function Home() {
               spacing={2}
             >
               <Typography sx={{ color: "white" }}>
-                Welcome 🎉 , {userDetails?.email}{" "}
+                Welcome 🎉 , {userDetails?.email ? userDetails?.email : "Guest"}{" "}
               </Typography>
               <Avatar>{userDetails?.email?.slice(0, 1).toUpperCase()}</Avatar>
               <Button
                 sx={{ zIndex: 15 }}
                 color="neutral"
-                onClick={() => handleSignout()}
+                onClick={() =>
+                  userDetails?.email ? handleSignout() : redirectToLogin()
+                }
               >
-                Logout
+                {userDetails?.email ? "Logout" : "Login"}
               </Button>
             </Stack>
           </Box>
