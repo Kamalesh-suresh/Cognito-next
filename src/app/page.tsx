@@ -16,7 +16,12 @@ Auth.configure(awsconfig);
 export default function Home() {
   const router = useRouter();
   const user = false;
-  const [userDetails, setUserDetails] = useState([]);
+  const [userDetails, setUserDetails] = useState<UserDetails>({});
+
+  interface UserDetails {
+    email?: string;
+    // Add other properties as needed
+  }
 
   // useEffect(() => {
   //   if (!user) {
@@ -29,7 +34,7 @@ export default function Home() {
       .then(() => {
         // localStorage.setItem("AUTH_ACCESS_TOKEN", null);
         // localStorage.setItem("AUTH_ID_TOKEN", null);
-        window.localStorage.setItem("path", null);
+        // window.localStorage.setItem("path", null);
         // navigate("/login");
       })
       .catch(() => {
