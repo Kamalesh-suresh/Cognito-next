@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
+import FormHelperText from "@mui/joy/FormHelperText";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Checkbox from "@mui/joy/Checkbox";
@@ -70,6 +71,7 @@ export default function JoySignInSideTemplate() {
   // const email = "kamalesh@gmail.com";
   // const password = "Kamal@20";
   const router = useRouter();
+  const [errorMessgae, setErrorMessage] = React.useState("");
 
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
@@ -80,7 +82,7 @@ export default function JoySignInSideTemplate() {
         console.log(res);
         router.push("/");
       })
-      .catch((err) => console.log(err))
+      .catch((err) => setErrorMessage(err.message))
       .finally(() => {
         setEmailValue("");
         setPasswordValue("");
@@ -223,6 +225,9 @@ export default function JoySignInSideTemplate() {
                   // alert(JSON.stringify(data, null, 2));
                 }}
               >
+                <FormHelperText sx={{ color: "red" }}>
+                  {errorMessgae}
+                </FormHelperText>
                 <FormControl required>
                   <FormLabel>Email</FormLabel>
                   <Input

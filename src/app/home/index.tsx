@@ -4,7 +4,11 @@ import { Typography } from "@mui/joy";
 
 const Landing = () => {
   const { data, setData } = useMyContext();
-  return <Typography>{data}</Typography>;
+  return (
+    <Typography ml={4} sx={{ fontSize: "22px" }}>
+      {data}
+    </Typography>
+  );
 };
 
 export default Landing;

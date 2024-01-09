@@ -62,48 +62,46 @@ export default function Home() {
 
   return (
     <>
-      {!user ? (
-        <MyProvider>
-          <Box
-            sx={{
-              background: "rgb(11, 107, 203)",
-              height: "10vh",
-              width: "100vw",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
+      <MyProvider>
+        <Box
+          sx={{
+            background: "rgb(11, 107, 203)",
+            height: "10vh",
+            width: "100vw",
+            padding: 0,
+            margin: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Stack
+            mr={2}
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
           >
-            <Stack
-              mr={2}
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
+            <Typography sx={{ color: "white" }}>
+              Welcome 🎉 , {userDetails?.email ? userDetails?.email : "Guest"}{" "}
+            </Typography>
+            <Avatar>{userDetails?.email?.slice(0, 1).toUpperCase()}</Avatar>
+            <Button
+              sx={{ zIndex: 15 }}
+              color="neutral"
+              onClick={() =>
+                userDetails?.email ? handleSignout() : redirectToLogin()
+              }
             >
-              <Typography sx={{ color: "white" }}>
-                Welcome 🎉 , {userDetails?.email ? userDetails?.email : "Guest"}{" "}
-              </Typography>
-              <Avatar>{userDetails?.email?.slice(0, 1).toUpperCase()}</Avatar>
-              <Button
-                sx={{ zIndex: 15 }}
-                color="neutral"
-                onClick={() =>
-                  userDetails?.email ? handleSignout() : redirectToLogin()
-                }
-              >
-                {userDetails?.email ? "Logout" : "Login"}
-              </Button>
-            </Stack>
-          </Box>
-          <Typography>Hi Welcome to cognito auth app</Typography>
-          <Landing />
-        </MyProvider>
-      ) : (
-        <Typography>Please login to continue</Typography>
-      )}
+              {userDetails?.email ? "Logout" : "Login"}
+            </Button>
+          </Stack>
+        </Box>
+        <Typography mt={4} ml={4} sx={{ fontSize: "22px" }}>
+          Hi Welcome to cognito auth app
+        </Typography>
+        <Landing />
+      </MyProvider>
     </>
   );
 }

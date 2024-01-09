@@ -13,7 +13,7 @@ type MyProviderProps = {
 };
 
 export function MyProvider({ children }: MyProviderProps) {
-  const [data, setData] = useState("Shared data across Home page components");
+  const [data, setData] = useState("Home context");
 
   return (
     <MyContext.Provider value={{ data, setData }}>
