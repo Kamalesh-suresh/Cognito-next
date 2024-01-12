@@ -71,10 +71,10 @@ export default function JoySignInSideTemplate() {
   // const email = "kamalesh@gmail.com";
   // const password = "Kamal@20";
   const router = useRouter();
-  const [errorMessgae, setErrorMessage] = React.useState("");
+  const [errorMessgae, setErrorMessage] = React.useState<string>("");
 
-  const [emailValue, setEmailValue] = React.useState("");
-  const [passwordValue, setPasswordValue] = React.useState("");
+  const [emailValue, setEmailValue] = React.useState<string>("");
+  const [passwordValue, setPasswordValue] = React.useState<string>("");
 
   const login = () => {
     Auth.signIn(emailValue, passwordValue)

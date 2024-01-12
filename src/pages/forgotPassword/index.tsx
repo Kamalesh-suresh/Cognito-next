@@ -9,6 +9,7 @@ import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import Checkbox from "@mui/joy/Checkbox";
 import Divider from "@mui/joy/Divider";
+import FormHelperText from "@mui/joy/FormHelperText";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel, { formLabelClasses } from "@mui/joy/FormLabel";
 import IconButton, { IconButtonProps } from "@mui/joy/IconButton";
@@ -70,9 +71,11 @@ export default function ForgotPasswordTemplate() {
 
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [confirmCode, setConfirmCode] = React.useState("");
   const [confirmPasswordValue, setConfirmPasswordValue] = React.useState("");
   const [mode, setMode] = React.useState("verify");
+  const isPasswordMatch = passwordValue === confirmPasswordValue;
 
   console.log(emailValue);
 
@@ -91,8 +94,8 @@ export default function ForgotPasswordTemplate() {
         confirmPasswordValue
       );
       console.log("user:", user);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      setErrorMessage(err.message);
     }
   }
 
@@ -219,14 +222,17 @@ export default function ForgotPasswordTemplate() {
               or
             </Divider> */}
             <Stack gap={4} sx={{ mt: 2 }}>
+              <Typography>
+                {mode === "verify"
+                  ? "An confirmation code will be sent to you via email !"
+                  : "Please enter the confirmation code below to reset your password."}
+              </Typography>
               <form
                 onSubmit={(event: React.FormEvent<SignInFormElement>) => {
                   event.preventDefault();
                   mode === "verify" && forgotPassword();
                   mode === "changePassword" && changePassword();
-                  mode === "verify"
-                    ? setMode("changePassword")
-                    : setMode("verify");
+                  mode === "verify" ? setMode("changePassword") : null;
                   //   login();
                   // const formElements = event.currentTarget.elements;
                   // const data = {
@@ -250,6 +256,9 @@ export default function ForgotPasswordTemplate() {
                 )}
                 {mode === "changePassword" && (
                   <>
+                    <FormHelperText sx={{ color: "red" }}>
+                      {errorMessage}
+                    </FormHelperText>
                     <FormControl required>
                       <FormLabel>Confirmation code</FormLabel>
                       <Input
@@ -301,7 +310,15 @@ export default function ForgotPasswordTemplate() {
                     </Button>
                   )}
                   {mode === "changePassword" && (
-                    <Button type="submit" fullWidth>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      disabled={
+                        !isPasswordMatch ||
+                        passwordValue === "" ||
+                        confirmPasswordValue === ""
+                      }
+                    >
                       Change Password
                     </Button>
                   )}

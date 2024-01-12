@@ -8,6 +8,7 @@ import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
+import FormHelperText from "@mui/joy/FormHelperText";
 import Checkbox from "@mui/joy/Checkbox";
 import Divider from "@mui/joy/Divider";
 import FormControl from "@mui/joy/FormControl";
@@ -21,7 +22,6 @@ import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import GoogleIcon from "./GoogleIcon";
-
 
 interface FormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -64,13 +64,14 @@ function ColorSchemeToggle({ onClick, ...props }: IconButtonProps) {
 }
 
 export default function JoySignInSideTemplate() {
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
 
   const signup = () => {
     Auth.signUp(emailValue, passwordValue)
       .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .catch((err) => setErrorMessage(err.message));
   };
 
   return (
@@ -194,6 +195,9 @@ export default function JoySignInSideTemplate() {
                   signup();
                 }}
               >
+                <FormHelperText sx={{ color: "red" }}>
+                  {errorMessage}
+                </FormHelperText>
                 <FormControl required>
                   <FormLabel>Email</FormLabel>
                   <Input
