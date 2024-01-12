@@ -44,10 +44,10 @@ export default function Home() {
     Auth.currentAuthenticatedUser().then((user) => {
       console.log("user:", user?.attributes);
       setUserDetails(user?.attributes);
-      if (!user?.attributes?.email) {
-        console.log("Redirecting to login...");
-        router.push("/login");
-      }
+      // if (!user?.attributes?.email) {
+      //   console.log("Redirecting to login...");
+      //   router.push("/login");
+      // }
       // const res =
       //   user?.attributes?.given_name ||
       //   user?.attributes?.family_name ||
@@ -87,8 +87,8 @@ export default function Home() {
             </Typography>
             <Avatar>{userDetails?.email?.slice(0, 1).toUpperCase()}</Avatar>
             <Button
-              sx={{ zIndex: 15 }}
-              color="neutral"
+              variant="solid"
+              sx={{ color: "black" }}
               onClick={() =>
                 userDetails?.email ? handleSignout() : redirectToLogin()
               }
@@ -98,7 +98,9 @@ export default function Home() {
           </Stack>
         </Box>
         <Typography mt={4} ml={4} sx={{ fontSize: "22px" }}>
-          Hi Welcome to cognito auth app
+          {userDetails?.email
+            ? "Hi Welcome to cognito auth app"
+            : "Guest please login to see content"}
         </Typography>
         <Landing />
       </MyProvider>

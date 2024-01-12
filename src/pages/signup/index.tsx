@@ -2,13 +2,14 @@
 
 import * as React from "react";
 import { Amplify, Auth } from "aws-amplify";
-
+import { useRouter } from "next/navigation";
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import FormHelperText from "@mui/joy/FormHelperText";
+import { CircularProgress } from "@mui/joy";
 import Checkbox from "@mui/joy/Checkbox";
 import Divider from "@mui/joy/Divider";
 import FormControl from "@mui/joy/FormControl";
@@ -67,11 +68,19 @@ export default function JoySignInSideTemplate() {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const router = useRouter();
 
   const signup = () => {
+    setIsLoading(true);
     Auth.signUp(emailValue, passwordValue)
-      .then((res) => console.log(res))
-      .catch((err) => setErrorMessage(err.message));
+      .then((res) => {
+        console.log(res);
+        router.push("/");
+      })
+      .catch((err) => setErrorMessage(err.message))
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -217,8 +226,14 @@ export default function JoySignInSideTemplate() {
                   />
                 </FormControl>
                 <Stack gap={4} sx={{ mt: 2 }}>
-                  <Button type="submit" fullWidth>
-                    Sign up
+                  <Button
+                    startDecorator={
+                      isLoading ? <CircularProgress variant="solid" /> : null
+                    }
+                    type="submit"
+                    fullWidth
+                  >
+                    {isLoading ? "Signing up" : "Sign up"}
                   </Button>
                 </Stack>
               </form>

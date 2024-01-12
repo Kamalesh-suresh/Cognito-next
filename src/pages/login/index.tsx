@@ -8,6 +8,7 @@ import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import FormHelperText from "@mui/joy/FormHelperText";
 import Box from "@mui/joy/Box";
+import { CircularProgress } from "@mui/joy";
 import Button from "@mui/joy/Button";
 import Checkbox from "@mui/joy/Checkbox";
 import Divider from "@mui/joy/Divider";
@@ -75,8 +76,10 @@ export default function JoySignInSideTemplate() {
 
   const [emailValue, setEmailValue] = React.useState<string>("");
   const [passwordValue, setPasswordValue] = React.useState<string>("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const login = () => {
+    setIsLoading(true);
     Auth.signIn(emailValue, passwordValue)
       .then((res) => {
         console.log(res);
@@ -84,8 +87,7 @@ export default function JoySignInSideTemplate() {
       })
       .catch((err) => setErrorMessage(err.message))
       .finally(() => {
-        setEmailValue("");
-        setPasswordValue("");
+        setIsLoading(false);
       });
   };
 
@@ -259,8 +261,14 @@ export default function JoySignInSideTemplate() {
                       Forgot your password?
                     </Link>
                   </Box>
-                  <Button type="submit" fullWidth>
-                    Sign in
+                  <Button
+                    startDecorator={
+                      isLoading ? <CircularProgress variant="solid" /> : null
+                    }
+                    type="submit"
+                    fullWidth
+                  >
+                    {isLoading ? "Signing in" : "Sign in"}
                   </Button>
                 </Stack>
               </form>
