@@ -22,6 +22,8 @@ import Stack from "@mui/joy/Stack";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import GoogleIcon from "./GoogleIcon";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -69,6 +71,7 @@ export default function JoySignInSideTemplate() {
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false); // New state
 
   const router = useRouter();
 
@@ -219,10 +222,23 @@ export default function JoySignInSideTemplate() {
                 <FormControl required>
                   <FormLabel>Password</FormLabel>
                   <Input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     value={passwordValue}
                     onChange={(event) => setPasswordValue(event.target.value)}
+                    endDecorator={
+                      <IconButton
+                        size="sm"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        aria-label="toggle password visibility"
+                      >
+                        {showPassword ? (
+                          <VisibilityOffIcon />
+                        ) : (
+                          <VisibilityIcon />
+                        )}
+                      </IconButton>
+                    }
                   />
                 </FormControl>
                 <Stack gap={4} sx={{ mt: 2 }}>

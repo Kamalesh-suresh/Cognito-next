@@ -8,6 +8,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Amplify, Auth } from "aws-amplify";
 import Box from "@mui/joy/Box";
+import Tooltip from "@mui/joy/Tooltip";
+import IconButton, { IconButtonProps } from "@mui/joy/IconButton";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Landing from "./home";
 import awsconfig from "../aws-exports";
 
@@ -33,7 +37,7 @@ export default function Home() {
         // localStorage.setItem("AUTH_ACCESS_TOKEN", null);
         // localStorage.setItem("AUTH_ID_TOKEN", null);
         // window.localStorage.setItem("path", null);
-        router.push("/login");
+        window.location.reload();
       })
       .catch(() => {
         console.log("Error signing out");
@@ -86,15 +90,49 @@ export default function Home() {
               Welcome 🎉 , {userDetails?.email ? userDetails?.email : "Guest"}{" "}
             </Typography>
             <Avatar>{userDetails?.email?.slice(0, 1).toUpperCase()}</Avatar>
-            <Button
+            <Tooltip title={userDetails?.email ? "Logout" : "Login"} arrow>
+              <IconButton
+                size="sm"
+                sx={{
+                  ":hover": {
+                    backgroundColor: "rgba(255, 255, 255, 0.1)", // Change this color as needed
+                  },
+                }}
+                onClick={() =>
+                  userDetails?.email ? handleSignout() : redirectToLogin()
+                }
+                aria-label="toggle password visibility"
+              >
+                {userDetails?.email ? (
+                  <LockOutlinedIcon
+                    sx={{
+                      color: "white",
+                      fontSize: "3rem",
+                      paddingTop: "5px",
+                      paddingBottom: "5px",
+                    }}
+                  />
+                ) : (
+                  <LockOpenIcon
+                    sx={{
+                      color: "white",
+                      fontSize: "3rem",
+                      paddingTop: "5px",
+                      paddingBottom: "5px",
+                    }}
+                  />
+                )}
+              </IconButton>
+            </Tooltip>
+            {/* <Button
+              sx={{ fontWeight: "bold", fontSize: "22px" }}
               variant="solid"
-              sx={{ color: "black" }}
               onClick={() =>
                 userDetails?.email ? handleSignout() : redirectToLogin()
               }
             >
               {userDetails?.email ? "Logout" : "Login"}
-            </Button>
+            </Button> */}
           </Stack>
         </Box>
         <Typography mt={4} ml={4} sx={{ fontSize: "22px" }}>
